@@ -1,5 +1,7 @@
 <template>
-  <router-view/>
+  <div id="app">
+    <router-view/>
+  </div>
 </template>
 
 <script>
@@ -12,7 +14,15 @@
   font-family: 'Noto Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #000000;
-  box-sizing: border-box;
+  color: var(--cs-text);
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4 {
+  letter-spacing: -0.02em;
+}
+
+p {
+  margin-bottom: 0;
 }
 </style>

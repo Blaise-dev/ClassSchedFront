@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const AUTH_URL = 'http://localhost:3000/auth/admin/';
+const AUTH_URL = `${(process.env.VUE_APP_API_URL || 'http://127.0.0.1:8000').replace(/\/$/, '')}/auth/admin/`;
 
 class AuthService {
     login(admin) {

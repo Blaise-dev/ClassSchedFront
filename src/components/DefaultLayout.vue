@@ -1,27 +1,22 @@
 <template>
-    <div class="min-vh-100">
+    <div class="min-vh-100 d-flex flex-column">
         <Header/>
-        <main class="container-fluid">
-            <div class="row">
-                <div class="col-12 col-md-11 pt-3 px-0">
-                    <!-- Main content goes here -->
-                    <div class="row">
-                        <div class="col-10">
-                            <slot name="main-title"></slot>
-                        </div>
-                        <div class="col-2">
-                            <img src="@/assets/logo_uy1.png" alt="logo uy1" width="40" height="50">
-                            <span>Yaound&eacute; 1</span>
+        <main class="flex-grow-1 py-3">
+            <div class="cs-container">
+                <div class="d-flex align-items-center justify-content-between mb-3 page-top cs-card p-3">
+                    <slot name="main-title"></slot>
+                    <div class="d-flex align-items-center gap-2 school-badge">
+                        <img src="@/assets/logo_uy1.png" alt="logo uy1" width="34" height="42">
+                        <div>
+                            <div class="fw-bold">Université de Yaoundé I</div>
+                            <small>Organisation des cours</small>
                         </div>
                     </div>
-                    <div class="">
-                        <slot name="main-content"></slot>
-                    </div>
-                    <br><br><br><br><br><br><br><br><br>
-                    <Footer/>
                 </div>
+                <slot name="main-content"></slot>
             </div>
         </main>
+        <Footer/>
     </div>
 </template>
 
@@ -37,3 +32,21 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.page-top {
+    border-radius: 14px;
+}
+
+.school-badge {
+    color: var(--cs-muted);
+}
+
+@media (max-width: 768px) {
+    .page-top {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 0.75rem;
+    }
+}
+</style>

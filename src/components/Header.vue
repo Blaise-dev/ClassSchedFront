@@ -1,73 +1,91 @@
 <template>
-    <header class="border-bottom">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid px-4">
-                <div class="d-flex">
-                    <router-link to="/" class="navbar-brand text-danger">
-                        <img src="@/assets/logo.png" alt="logo" width="30" height="24" class="d-inline-block align-text-top">
-                        ClassSched
-                    </router-link>
+    <header class="cs-header border-bottom">
+        <nav class="navbar navbar-expand-lg bg-white">
+            <div class="cs-container d-flex align-items-center justify-content-between py-2">
+                <router-link to="/" class="navbar-brand d-flex align-items-center gap-2 m-0 brand-link">
+                    <img src="@/assets/logo.png" alt="logo" width="34" height="28" class="d-inline-block align-text-top">
+                    <div class="d-flex flex-column">
+                        <span class="brand-title">ClassSched</span>
+                        <span class="brand-subtitle">Planification académique</span>
+                    </div>
+                </router-link>
+
+                <div class="d-none d-lg-flex align-items-center gap-3 nav-links">
+                    <router-link to="/accueil/" class="nav-item" :class="{ active: route.path === '/accueil/' || route.path === '/' }">Accueil</router-link>
+                    <router-link to="/planning/" class="nav-item" :class="{ active: route.path.startsWith('/planning') }">Planning</router-link>
+                    <router-link to="/reservations/" class="nav-item" :class="{ active: route.path.startsWith('/reservations') }">Réservations</router-link>
                 </div>
-                <router-link class="btn d-flex px-5 btn-grad fw-bolder" to="/admin/login">Connexion</router-link>
+
+                <router-link class="btn cs-btn-primary" :to="adminCta.to">{{ adminCta.label }}</router-link>
             </div>
         </nav>
     </header>
 </template>
 
 <script>
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+
 export default {
     name: 'AdminHeader',
-    components: {}
+    setup() {
+        const route = useRoute();
+        const adminCta = computed(() => {
+            if (route.path.startsWith('/admin')) {
+                return { to: '/accueil/', label: 'Espace public' };
+            }
+            return { to: '/admin/login', label: 'Espace admin' };
+        });
+
+        return {
+            route,
+            adminCta,
+        };
+    },
 }
 </script>
 
 <style>
-.btn-grad {
-    background-image: linear-gradient(to right, #a33fe5 0%, #f73b66  51%, #c73cb5  100%);
-    text-align: center;
-    transition: 0.5s;
-    background-size: 200% auto;
-    color: #fff;
-    font-weight: bolder;
-    border-radius: 5px;
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    border-bottom: 4px solid #961fe6;        
-    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-}
-  
-.btn-grad:hover {
-    background-position: right center; /* change the direction of the change here */
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    border-bottom: 4px solid #961fe6;        
-    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+.cs-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(8px);
 }
 
-.animate_block {
-
-  animation-name: slideIn;
-  animation-duration: 2s;
-  animation-timing-function: ease;
-  animation-delay: 0.2s;
-  animation-iteration-count: 1;
-  animation-fill-mode: forwards;
+.brand-link {
+    color: inherit;
 }
 
+.brand-title {
+    font-weight: 800;
+    color: var(--cs-primary);
+    line-height: 1;
+}
 
-@keyframes slideIn {
-  0% {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.brand-subtitle {
+    font-size: 0.78rem;
+    color: var(--cs-muted);
+}
+
+.nav-links .nav-item {
+    font-weight: 700;
+    color: #4d5565;
+    padding: 0.45rem 0.7rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.nav-links .nav-item:hover,
+.nav-links .nav-item.active {
+    color: var(--cs-primary);
+    background: #f0ebfb;
+}
+
+@media (max-width: 992px) {
+    .brand-subtitle {
+        display: none;
+    }
 }
 </style>

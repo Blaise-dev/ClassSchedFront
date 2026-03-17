@@ -1,30 +1,30 @@
 <template>
-    <div class="min-vh-100">
+    <div class="min-vh-100 d-flex flex-column">
         <Header/>
-        <main class="container-fluid">
-            <div class="row">
-                <div class="col-12 col-md-1 p-0 side-menu">
-                    <Sidebar/>
-                </div>
-                <div class="col-12 col-md-11 pt-3 px-0">
-                    <!-- Main content goes here -->
-                    <div class="row">
-                        <div class="col-10">
+        <main class="flex-grow-1 py-3">
+            <div class="cs-container">
+                <div class="row g-3">
+                    <div class="col-12 col-lg-2">
+                        <div class="side-menu cs-card h-100 overflow-hidden">
+                            <Sidebar/>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-10">
+                        <div class="d-flex align-items-center justify-content-between mb-3 cs-card p-3">
                             <slot name="main-title"></slot>
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="@/assets/logo_uy1.png" alt="logo uy1" width="34" height="42">
+                                <span class="school-label">Yaoundé 1</span>
+                            </div>
                         </div>
-                        <div class="col-2">
-                            <img src="@/assets/logo_uy1.png" alt="logo uy1" width="40" height="50">
-                            <span>Yaound&eacute; 1</span>
+                        <div class="cs-card p-3 p-md-4">
+                            <slot name="main-content"></slot>
                         </div>
                     </div>
-                    <div class="row">
-                        <slot name="main-content"></slot>
-                    </div>
-                    <br><br><br><br><br><br><br><br><br>
-                    <Footer/>
                 </div>
             </div>
         </main>
+        <Footer/>
     </div>
 </template>
 
@@ -45,6 +45,11 @@ export default {
 
 <style> 
 .side-menu {
-    background-color: #4e1bad;
+    background-color: #fff;
+}
+
+.school-label {
+    color: var(--cs-muted);
+    font-weight: 700;
 }
 </style>
