@@ -1,0 +1,7 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "env": {
+    "VUE_APP_API_URL": "https://classsched-backend.onrender.com"
+  }
+}
