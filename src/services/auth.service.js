@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const AUTH_URL = `${(process.env.VUE_APP_API_URL || 'http://127.0.0.1:8000').replace(/\/$/, '')}/utilisateur/auth/admin/`;
+const API_BASE_URL = (process.env.VUE_APP_API_URL || 'https://classsched-backend.onrender.com').replace(/\/$/, '');
+const AUTH_URL = `${API_BASE_URL}/utilisateur/auth/admin/`;
 
 class AuthService {
     login(admin) {

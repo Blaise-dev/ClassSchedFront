@@ -119,7 +119,7 @@ export default {
                     this.loading = false;
                     this.message = 
                         (error.response && error.response.data && error.response.data.message) ||
-                        error.message ||
+                        (error.message === 'Network Error' ? 'Connexion au serveur impossible. Vérifiez la connexion internet et réessayez.' : error.message) ||
                         error.toString();
                 }
             );
