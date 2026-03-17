@@ -47,6 +47,7 @@
                             </div>
                         </div>
                     </Form>
+                    <p class="text-end small mb-0">Pas encore de compte ? <router-link to="/admin/register" class="fw-bold">Créer un accès admin</router-link></p>
                 </div>
 
                 <div class="col-md-6 d-none d-md-flex p-0 m-0 position-relative">
