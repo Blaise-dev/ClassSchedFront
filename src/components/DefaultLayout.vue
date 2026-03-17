@@ -35,11 +35,16 @@ export default {
 
 <style scoped>
 .page-top {
-    border-radius: 14px;
+    border-radius: var(--cs-radius-lg);
+    border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 .school-badge {
-    color: var(--cs-muted);
+    color: #46506a;
+    background: rgba(255, 255, 255, 0.66);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    padding: 0.45rem 0.7rem;
 }
 
 @media (max-width: 768px) {

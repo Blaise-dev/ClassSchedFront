@@ -27,10 +27,11 @@ export default {
 <style scoped>
 .admin-switcher-link {
   border-radius: 999px;
-  padding: 0.5rem 1rem;
+  padding: 0.55rem 1.05rem;
   font-weight: 700;
   color: #4d5565;
-  border: 1px solid #e5e8f1;
+  border: 1px solid rgba(80, 92, 124, 0.2);
+  background: rgba(255, 255, 255, 0.72);
   transition: all 0.2s ease;
 }
 
@@ -39,5 +40,6 @@ export default {
   background: linear-gradient(135deg, var(--cs-primary), var(--cs-accent));
   color: #fff;
   border-color: transparent;
+  box-shadow: 0 10px 22px rgba(91, 44, 255, 0.26);
 }
 </style>

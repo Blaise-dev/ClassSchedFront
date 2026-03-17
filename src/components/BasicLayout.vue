@@ -45,11 +45,12 @@ export default {
 
 <style> 
 .side-menu {
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: var(--cs-radius-lg);
 }
 
 .school-label {
-    color: var(--cs-muted);
+    color: #4b5570;
     font-weight: 700;
 }
 </style>

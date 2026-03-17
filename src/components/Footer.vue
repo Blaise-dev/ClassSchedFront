@@ -1,7 +1,7 @@
 <template>
-    <footer class="site-footer border-top mt-5 py-4">
+    <footer class="site-footer mt-5 py-4">
         <div class="cs-container">
-            <div class="row g-4">
+            <div class="row g-4 footer-shell p-4 p-md-5">
                 <div class="col-md-4">
                     <p class="footer-title">ClassSched</p>
                     <p class="footer-text">Plateforme professionnelle de planification des cours, événements académiques et réservations.</p>
@@ -23,7 +23,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="row border-top mt-3 pt-3">
+            <div class="row border-top border-light-subtle mt-3 pt-3">
                 <div class="col text-center footer-copyright">
                     © 2026 — ClassSched. Tous droits réservés.
                 </div>
@@ -41,27 +41,36 @@ export default {
 
 <style scoped>
 .site-footer {
-    background: #fff;
+    background: transparent;
+}
+
+.footer-shell {
+    border-radius: 22px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: linear-gradient(155deg, rgba(16, 22, 48, 0.86), rgba(22, 30, 64, 0.72));
+    backdrop-filter: blur(14px);
+    box-shadow: 0 16px 40px rgba(6, 10, 28, 0.28);
 }
 
 .footer-title {
     font-weight: 800;
+    color: #f2f4ff;
     margin-bottom: 0.65rem;
 }
 
 .footer-text,
 .footer-list {
-    color: var(--cs-muted);
+    color: rgba(223, 228, 255, 0.78);
     line-height: 1.7;
 }
 
 .footer-list a {
-    color: var(--cs-primary);
+    color: #c3c9ff;
     font-weight: 600;
 }
 
 .footer-copyright {
-    color: #8891a5;
+    color: rgba(213, 218, 244, 0.65);
     font-size: 0.9rem;
 }
 </style>

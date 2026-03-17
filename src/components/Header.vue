@@ -1,6 +1,6 @@
 <template>
-    <header class="cs-header border-bottom">
-        <nav class="navbar navbar-expand-lg bg-white">
+    <header class="cs-header">
+        <nav class="navbar navbar-expand-lg">
             <div class="cs-container d-flex align-items-center justify-content-between py-2">
                 <router-link to="/" class="navbar-brand d-flex align-items-center gap-2 m-0 brand-link">
                     <img src="@/assets/logo.png" alt="logo" width="34" height="28" class="d-inline-block align-text-top">
@@ -48,39 +48,49 @@ export default {
 <style>
 .cs-header {
     position: sticky;
-    top: 0;
+    top: 10px;
     z-index: 20;
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(8px);
+    background: transparent;
+}
+
+.cs-header .navbar {
+    margin: 0 auto;
+    max-width: 1260px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 12px 30px rgba(7, 12, 34, 0.2);
 }
 
 .brand-link {
-    color: inherit;
+    color: #f7f8ff;
 }
 
 .brand-title {
     font-weight: 800;
-    color: var(--cs-primary);
+    color: #fff;
     line-height: 1;
 }
 
 .brand-subtitle {
     font-size: 0.78rem;
-    color: var(--cs-muted);
+    color: rgba(235, 237, 255, 0.78);
 }
 
 .nav-links .nav-item {
     font-weight: 700;
-    color: #4d5565;
+    color: rgba(241, 244, 255, 0.82);
     padding: 0.45rem 0.7rem;
-    border-radius: 8px;
+    border-radius: 10px;
     transition: all 0.2s ease;
 }
 
 .nav-links .nav-item:hover,
 .nav-links .nav-item.active {
-    color: var(--cs-primary);
-    background: #f0ebfb;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.2);
 }
 
 @media (max-width: 992px) {

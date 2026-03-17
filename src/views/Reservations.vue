@@ -6,13 +6,16 @@
 
       <template #main-content>
         <section class="cs-card p-4 mb-4">
+          <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
           <h2 class="cs-section-title">Demandes de réservation de salles</h2>
+          <span class="cs-pill">Traitement en temps réel</span>
+          </div>
           <p class="cs-section-subtitle mt-2">Consultez les demandes en cours, traitez les priorités et gardez une visibilité claire sur l’occupation des salles.</p>
         </section>
 
         <section class="row g-3">
           <article v-for="reservation in reservations" :key="reservation.id" class="col-12 col-lg-6">
-            <div class="cs-card p-3 reservation-card h-100">
+            <div class="cs-card p-3 reservation-card h-100 cs-card-hover">
               <div class="d-flex justify-content-between align-items-start">
                 <div>
                   <span class="status-badge" :class="`status-${reservation.status}`">{{ reservation.statusLabel }}</span>
@@ -69,6 +72,7 @@
 <style scoped>
 .reservation-card {
   border: 1px solid var(--cs-border);
+  border-radius: var(--cs-radius-lg);
 }
 
 .reservation-title {
@@ -98,12 +102,14 @@
 }
 
 .status-pending {
-  background: #fff6dd;
-  color: #9a6b00;
+  background: #fff1d2;
+  color: #8b6000;
+  border: 1px solid #ffd787;
 }
 
 .status-approved {
-  background: #e6f7ee;
-  color: #17613b;
+  background: #dcf7e8;
+  color: #14693f;
+  border: 1px solid #8be2b3;
 }
 </style>

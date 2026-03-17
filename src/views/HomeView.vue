@@ -8,8 +8,10 @@
 
         <template v-slot:main-content>
             <section class="hero cs-card p-4 p-md-5 mb-4">
+                <div class="hero-glow"></div>
                 <div class="row align-items-center g-4">
                     <div class="col-lg-7">
+                        <span class="hero-kicker">Pilotage académique nouvelle génération</span>
                         <h1 class="hero-title">Planifiez les cours et événements universitaires avec fiabilité</h1>
                         <p class="hero-subtitle mt-3">ClassSched centralise l’emploi du temps, réduit les collisions de salles et améliore la communication entre administration, enseignants et étudiants.</p>
                         <div class="d-flex flex-wrap gap-2 mt-4">
@@ -29,7 +31,7 @@
 
                 <div class="row g-3 mt-1">
                     <div v-for="item in values" :key="item.title" class="col-md-4">
-                        <article class="cs-card h-100 p-3 value-card">
+                        <article class="cs-card h-100 p-3 value-card cs-card-hover">
                             <div class="value-icon"><v-icon size="22">{{ item.icon }}</v-icon></div>
                             <h3 class="value-title mt-2">{{ item.title }}</h3>
                             <p class="value-text mt-1">{{ item.description }}</p>
@@ -94,12 +96,35 @@ export default {
 <style scoped>
 .hero {
     overflow: hidden;
+    position: relative;
+}
+
+.hero-glow {
+    position: absolute;
+    width: 360px;
+    height: 360px;
+    border-radius: 999px;
+    right: -110px;
+    top: -120px;
+    background: radial-gradient(circle, rgba(91, 44, 255, 0.35), rgba(91, 44, 255, 0));
+}
+
+.hero-kicker {
+    display: inline-block;
+    margin-bottom: 0.85rem;
+    padding: 0.35rem 0.8rem;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.82rem;
+    color: #4f2ad4;
+    background: rgba(91, 44, 255, 0.12);
 }
 
 .hero-title {
     font-size: clamp(1.6rem, 2.5vw, 2.6rem);
     font-weight: 800;
     max-width: 640px;
+    line-height: 1.15;
 }
 
 .hero-subtitle {
@@ -109,27 +134,24 @@ export default {
 }
 
 .hero-image {
-    border-radius: 14px;
-    border: 1px solid var(--cs-border);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: var(--cs-shadow-soft);
 }
 
 .value-card {
-    transition: transform 0.2s ease;
-}
-
-.value-card:hover {
-    transform: translateY(-4px);
+    border-radius: var(--cs-radius-lg);
 }
 
 .value-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
+    width: 46px;
+    height: 46px;
+    border-radius: 13px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: var(--cs-primary);
-    background: #eee8fb;
+    color: #fff;
+    background: linear-gradient(135deg, var(--cs-primary), var(--cs-accent));
 }
 
 .value-title {
@@ -143,9 +165,9 @@ export default {
 }
 
 .metric-value {
-    font-size: 1.75rem;
+    font-size: 2rem;
     font-weight: 800;
-    color: var(--cs-primary);
+    color: #4023c6;
 }
 
 .metric-label {

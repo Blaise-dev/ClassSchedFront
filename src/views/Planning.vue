@@ -17,7 +17,7 @@
               Erreur ! Une erreur s'est produite lors de l'opération.
           </v-alert>
 
-          <section class="cs-card p-3 p-md-4 mb-4">
+          <section class="cs-card p-3 p-md-4 mb-4 filters-shell">
           <h2 class="text-center mb-3 cs-section-title">EMPLOI DE TEMPS - TIMETABLE</h2>
           <div class="menu-container w-100 m-auto">
             <div class="text-left mr-16">
@@ -353,6 +353,11 @@
 
   .carousel-container {
     border: 1px solid var(--cs-border);
+    border-radius: var(--cs-radius-lg);
+  }
+
+  .filters-shell {
+    border-radius: var(--cs-radius-lg);
   }
 
   .time-table-transition-enter {

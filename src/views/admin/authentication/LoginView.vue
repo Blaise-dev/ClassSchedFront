@@ -130,14 +130,14 @@ export default {
 <style>
 .auth-screen {
     min-height: 100vh;
-    background: radial-gradient(circle at top right, #e8dcff, #f5f7fc 45%);
+    background: radial-gradient(circle at top right, #d5c9ff, #f4f7ff 45%);
 }
 
 .auth-card {
     border-radius: 18px;
     background: #fff;
-    box-shadow: 0 22px 45px rgba(33, 44, 74, 0.14);
-    border: 1px solid #e7eaf3;
+    box-shadow: 0 30px 60px rgba(33, 44, 74, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.92);
 }
 
 .auth-title {
@@ -147,7 +147,8 @@ export default {
 .auth-input {
     padding: 0.75rem 3rem;
     border-radius: 12px;
-    border: 1px solid #dbe0ec;
+    border: 1px solid #d4daea;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .right-side {
