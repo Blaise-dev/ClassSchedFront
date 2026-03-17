@@ -1,94 +1,56 @@
 <template>
-    <br><br><br>
-    <div>
-      <h2 class="font-weight-bold m-auto w-50 text-left">
-        Réservations de salle
-      </h2>
-      <br><br><br>
-      <p class="text-h6 text-grey-darken-1 w-75 text-left m-auto">Les réservations de salle</p>
-      <br><br>
-      <p class="text-block alert alert-info text-body-1 w-50 text-left m-auto">
-        <span class="font-weight-bold">Informations</span> ! les réservations ne peuvent être faites pour une même salle, à une même heure
-      </p>
-      <div class="d-flex justify-center pr-16 w-75">
-        <div class="block-reservation text-left mt-15 bg-blue-grey-lighten-5 mr-lg-16 ml-lg-n16 p-2 row">
-          <p class="text-body-1 font-weight-bold col-md-10">Nouvelle demande de réservation</p>
+    <default-layout>
+      <template #main-title>
+        <span class="cs-pill">Réservations</span>
+      </template>
 
-          <div class="button-container col-md-2">
-            <v-btn icon color="green" size="35" @click="acceptReservation">
-              <v-icon>mdi-check</v-icon>
-            </v-btn>
+      <template #main-content>
+        <section class="cs-card p-4 mb-4">
+          <h2 class="cs-section-title">Demandes de réservation de salles</h2>
+          <p class="cs-section-subtitle mt-2">Consultez les demandes en cours, traitez les priorités et gardez une visibilité claire sur l’occupation des salles.</p>
+        </section>
 
-            <v-btn icon class="ml-4" color="red" size="35" @click="refuseReservation">
-              <v-icon>mdi-close</v-icon>
-            </v-btn>
-          </div>
-
-          <div>
-            <span class="text-grey font-weight-bold">Pr.Atsa Roger Minkoulou</span>
-          </div>
-          <div>
-            <span class="text-grey">S006</span><span class="text-grey">, </span><span class="text-grey">15/12/2022</span>
-          </div>
-          <div>
-            <span class="text-grey">Motif</span> <span class="text-grey">: </span><span class="text-grey">"Cours de INF4027, rattrapage"</span>
-          </div>
-        </div>
-      </div>
-      <div class="d-flex justify-center pr-16 w-75">
-        <div class="block-reservation text-left mt-15 bg-blue-grey-lighten-5 mr-lg-16 ml-lg-n16 p-2 row">
-          <p class="text-body-1 font-weight-bold col-md-10">Nouvelle demande de réservation</p>
-
-          <div class="button-container col-md-2">
-            <v-btn icon color="green" size="35" @click="acceptReservation">
-              <v-icon>mdi-check</v-icon>
-            </v-btn>
-
-            <v-btn icon class="ml-4" color="red" size="35" @click="refuseReservation">
-              <v-icon>mdi-close</v-icon>
-            </v-btn>
-          </div>
-
-          <div>
-            <span class="text-grey font-weight-bold">Dr.Nzekon Armel</span>
-          </div>
-          <div>
-            <span class="text-grey">A135</span><span class="text-grey">, </span><span class="text-grey">25/11/2022</span>
-          </div>
-          <div>
-            <span class="text-grey">Motif</span> <span class="text-grey">: </span><span class="text-grey">"Pour conférence."</span>
-          </div>
-        </div>
-      </div>
-      <div class="d-flex justify-center pr-16 w-75">
-        <div class="block-reservation text-left mt-15 bg-blue-grey-lighten-5 mr-lg-16 ml-lg-n16 p-2 row">
-          <p class="text-body-1 font-weight-bold col-md-10">Demande de réservation</p>
-
-          <div class="button-container col-md-2">
-            <span>ACCEPÉE</span>
-          </div>
-
-          <div>
-            <span class="text-grey font-weight-bold">Pr.Kouokam Etienne</span>
-          </div>
-          <div>
-            <span class="text-grey">A135</span><span class="text-grey">, </span><span class="text-grey">25/11/2022</span>
-          </div>
-          <div>
-            <span class="text-grey">Motif</span> <span class="text-grey">: </span><span class="text-grey">"TD de INF4048, compilation"</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- ... le reste du code ... -->
+        <section class="row g-3">
+          <article v-for="reservation in reservations" :key="reservation.id" class="col-12 col-lg-6">
+            <div class="cs-card p-3 reservation-card h-100">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <span class="status-badge" :class="`status-${reservation.status}`">{{ reservation.statusLabel }}</span>
+                  <h3 class="reservation-title mt-2">{{ reservation.teacher }}</h3>
+                </div>
+                <div class="reservation-actions" v-if="reservation.status === 'pending'">
+                  <v-btn size="small" icon color="green" @click="acceptReservation">
+                    <v-icon>mdi-check</v-icon>
+                  </v-btn>
+                  <v-btn size="small" icon color="red" @click="refuseReservation">
+                    <v-icon>mdi-close</v-icon>
+                  </v-btn>
+                </div>
+              </div>
+              <p class="reservation-meta mt-3">Salle: <strong>{{ reservation.room }}</strong> • Date: <strong>{{ reservation.date }}</strong></p>
+              <p class="reservation-meta">Créneau: <strong>{{ reservation.slot }}</strong></p>
+              <p class="reservation-motif mt-2">{{ reservation.reason }}</p>
+            </div>
+          </article>
+        </section>
+      </template>
+    </default-layout>
 </template>
   
   <script>
+  import DefaultLayout from '@/components/DefaultLayout.vue'
   
   export default {
+    components: {
+      DefaultLayout,
+    },
     data() {
       return {
-
+        reservations: [
+          { id: 1, teacher: 'Pr. Atsa Roger Minkoulou', room: 'S006', date: '15/12/2026', slot: '08:00 - 10:00', reason: 'Cours INF4027, séance de rattrapage.', status: 'pending', statusLabel: 'En attente' },
+          { id: 2, teacher: 'Dr. Nzekon Armel', room: 'A135', date: '25/11/2026', slot: '14:00 - 16:00', reason: 'Conférence départementale.', status: 'pending', statusLabel: 'En attente' },
+          { id: 3, teacher: 'Pr. Kouokam Etienne', room: 'A135', date: '22/11/2026', slot: '10:00 - 12:00', reason: 'TD INF4048 — compilation.', status: 'approved', statusLabel: 'Acceptée' },
+        ],
       };
     },
     methods: {
@@ -104,13 +66,44 @@
   };
   </script>
   
-<style>
-  .button-container {
-    display: flex;
-  }
+<style scoped>
+.reservation-card {
+  border: 1px solid var(--cs-border);
+}
 
-  .block-reservation {
-    width: 500px;
-    margin-left: 15%;
-  }
+.reservation-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.reservation-meta {
+  color: var(--cs-muted);
+}
+
+.reservation-motif {
+  color: #3e4658;
+  line-height: 1.7;
+}
+
+.reservation-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.status-badge {
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.status-pending {
+  background: #fff6dd;
+  color: #9a6b00;
+}
+
+.status-approved {
+  background: #e6f7ee;
+  color: #17613b;
+}
 </style>

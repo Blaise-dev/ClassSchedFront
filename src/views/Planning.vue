@@ -17,9 +17,9 @@
               Erreur ! Une erreur s'est produite lors de l'opération.
           </v-alert>
 
-          <h2 class="mt-5 text-center">EMPLOI DE TEMPS - TIMETABLE</h2>
-          <br/>
-          <div class="menu-container w-75 m-auto">
+          <section class="cs-card p-3 p-md-4 mb-4">
+          <h2 class="text-center mb-3 cs-section-title">EMPLOI DE TEMPS - TIMETABLE</h2>
+          <div class="menu-container w-100 m-auto">
             <div class="text-left mr-16">
               <p class="m-0">
                 <span class="font-weight-bold">Faculté</span> : <span>FACSCIENCES</span>
@@ -32,7 +32,7 @@
               </p>
             </div>
 
-            <div class="select-container ml-2 w-100 row">
+            <div class="select-container ml-2 w-100 row g-2">
 
               <v-select
                 v-model="selectedMajor"
@@ -91,6 +91,7 @@
               </v-btn>
             </div>
           </div>
+          </section>
 
           <div class="d-flex m-auto w-25 mt-5">
             <p class="ml-10">
@@ -101,14 +102,14 @@
             </p>
           </div>
 
-          <div class="carousel-container w-75 m-auto">
+          <div class="carousel-container w-100 m-auto cs-card p-3 p-md-4">
             <div class="carousel-content d-flex justify-content-between align-items-center">
               <v-btn icon @click="prevTimetable" class="carousel-button">
                 <v-icon>mdi-chevron-left</v-icon>
               </v-btn>
 
               <transition name="time-table-transition">
-                <time-table :time-table="currentTimetable" :key="currentIndex" v-if="!isLoading" class="w-75 m-auto mt-5"></time-table>
+                <time-table :time-table="currentTimetable" :key="currentIndex" v-if="!isLoading" class="w-100 m-auto mt-3"></time-table>
               </transition>
             
               <div class="loader-container mt-16">
@@ -335,16 +336,23 @@
 <style>
   .select-container {
     display: flex;
-    width: 594px;
+    width: 100%;
   }
 
   .menu-container {
     display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
   }
 
   .button-container {
       display: flex;
       justify-content: flex-end;
+      align-items: center;
+  }
+
+  .carousel-container {
+    border: 1px solid var(--cs-border);
   }
 
   .time-table-transition-enter {
@@ -382,5 +390,16 @@
   .alert-width {
       max-width: 33.33%; /* 4 colonnes sur 12 */
       z-index: 9999;
+  }
+
+  @media (max-width: 992px) {
+    .menu-container {
+      flex-direction: column;
+    }
+
+    .button-container {
+      justify-content: flex-start;
+      width: 100% !important;
+    }
   }
 </style>

@@ -1,7 +1,7 @@
 <template>
     <BasicLayout>
         <template v-slot:main-title>
-            <h1 class="text-center fs-4">R&eacute;servations de salle</h1>
+            <h1 class="fs-4 fw-bold m-0">Réservations de salle</h1>
         </template>
 
         <template v-slot:main-content>
@@ -30,18 +30,17 @@
                 Erreur ! Une erreur s'est produite lors de l'opération.
             </v-alert>
 
-            <div>
+            <div class="cs-card p-3 p-md-4">
+            <p class="text-h6 text-grey-darken-1 w-100 text-left m-auto">Faites une réservation de salle</p>
             <br>
-            <p class="text-h6 text-grey-darken-1 w-75 text-left m-auto">Faites une réservation de salle</p>
-            <br>
-            <p class="text-block alert alert-danger text-body-1 w-50 text-left m-auto">
+            <p class="text-block alert alert-danger text-body-1 w-100 text-left m-auto">
                 <span class="font-weight-bold">Attention</span> ! vous ne pouvez pas faire de demande de réservation pour une salle, à une même heure déjà réservée.
             </p>
-            <h1 class="text-h6 w-75 text-left m-auto">Remplissez le formulaire ci-dessous pour demander une salle</h1>
+            <h1 class="text-h6 w-100 text-left m-auto">Remplissez le formulaire ci-dessous pour demander une salle</h1>
 
             <div class="d-flex justify-center pr-16 w-100">
 
-                <form class="block-reservation text-left mt-15 mr-lg-16 ml-lg-n16 p-5 border w-50 row" v-if="!isLoading">
+                <form class="block-reservation text-left mt-4 p-4 border w-100 row" v-if="!isLoading">
                 <div class="container">
                     <p class="text-body-1 font-weight-bold col-md-10">Les champs marqués d’un (<span class="font-weight-bold text-danger">*</span>) sont obligatoires</p>
 
@@ -75,7 +74,7 @@
                     <textarea id="motif" class="form-control" v-model="motif"></textarea>
                     </div>
 
-                    <v-btn class="btn btn-grad text-white w-50 mt-10" @click="newReservation">
+                    <v-btn class="btn cs-btn-primary text-white w-100 mt-6" @click="newReservation">
                         Consulter
                     </v-btn>
                 </div>
@@ -183,6 +182,12 @@
     .alert-width {
         max-width: 33.33%; /* 4 colonnes sur 12 */
         z-index: 9999;
+    }
+
+    .block-reservation {
+        border-radius: 14px;
+        border-color: var(--cs-border) !important;
+        box-shadow: var(--cs-shadow);
     }
 
 </style>

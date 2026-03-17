@@ -1,50 +1,44 @@
 <template>
-    <div class="container-fluid">
-        <div class="row mx-5 px-5 py-3">
-            <div class="col-2 mx-5 px-5">
-                <router-link to="/admin" class="navbar-brand fw-bolder text-danger d-inline-flex align-items-center">
-                    <img src="@/assets/logo.png" alt="logo" width="30" height="24" class="d-inline-block align-text-top"/>
-                    <span class="mx-1">ClassSched</span>
+    <div class="auth-screen">
+        <div class="cs-container py-4">
+            <div class="mb-3">
+                <router-link to="/" class="navbar-brand fw-bolder text-decoration-none d-inline-flex align-items-center gap-2">
+                    <img src="@/assets/logo.png" alt="logo" width="32" height="26" class="d-inline-block align-text-top"/>
+                    <span>ClassSched</span>
                 </router-link>
             </div>
-        </div>
-        <div class="row mx-5 text-center rounded shadow-lg animate_block">
-            <div class="col-12 col-md-6 p-5">
-                <div class="p-5 justify-content-center align-items-center">
-                    <h2 class="fs-6 fw-normal text-uppercase text-center">
-                        Bienvenue sur<br/><span class="fs-2 form-title">CLASS-SCHED</span>
-                    </h2>
-                    <p class="text-center mb-4 text-muted" style="font-size: 0.8rem;">
-                        Connectez-vous &agrave; l'aide du login fourni par l'administrateur
-                    </p>
-                    <Form @submit="handleLogin" :validation-schema="schema" class="my-5">
+
+            <div class="row g-0 auth-card overflow-hidden">
+                <div class="col-12 col-md-6 p-4 p-md-5 bg-white">
+                    <h2 class="fs-6 fw-normal text-uppercase text-center">Bienvenue sur</h2>
+                    <p class="fs-2 fw-bold text-center auth-title">CLASS-SCHED</p>
+                    <p class="text-center mb-4 text-muted small">Connectez-vous avec votre compte administrateur pour gérer la plateforme.</p>
+
+                    <Form @submit="handleLogin" :validation-schema="schema" class="my-4">
                         <div class="row mb-3">
                             <div class="d-flex align-items-center position-relative">
-                                <span class="position-absolute px-5"> <!--px-3-->
+                                <span class="position-absolute px-4">
                                     <font-awesome-icon icon="user"></font-awesome-icon>
                                 </span>
-                                <Field class="form-control" name="login" id="login" placeholder="Login"/>
+                                <Field class="form-control auth-input" name="login" id="login" placeholder="Login"/>
                             </div>
                             <ErrorMessage name="login" class="text-danger mt-2 error-field"/>
                         </div>
                         <div class="row mb-3">
                             <div class="d-flex align-items-center position-relative">
-                                <span class="position-absolute px-5">
+                                <span class="position-absolute px-4">
                                     <font-awesome-icon icon="key"></font-awesome-icon>
                                 </span>
-                                <Field class="form-control" type="password" name="password" id="password" placeholder="Mot de passe"/>
-                                <span class="position-absolute end-0 px-5 mx-2">
+                                <Field class="form-control auth-input" type="password" name="password" id="password" placeholder="Mot de passe"/>
+                                <span class="position-absolute end-0 px-4 mx-2">
                                     <font-awesome-icon icon="eye" id="password-eye"></font-awesome-icon>
                                 </span>
                             </div>
                             <ErrorMessage name="password" class="text-danger mt-2 error-field"/>
                         </div>
                         <div class="form-group mb-3">
-                            <button type="submit" class="btn-grad px-4 py-2" :disabled="loading">
-                                <!-- <div class="spinner-border" role="status">
-                                    <span class="visually-hidden">Loading...</span>
-                                </div> -->
-                                <span class="text-white fs-6">Connexion</span>
+                            <button type="submit" class="btn cs-btn-primary w-100 py-2" :disabled="loading">
+                                <span class="text-white fs-6 fw-bold">Connexion</span>
                             </button>
                         </div>
                         <div class="form-group">
@@ -54,15 +48,16 @@
                         </div>
                     </Form>
                 </div>
-            </div>
-            <div class="col-md-6 d-none d-md-flex p-0 m-0 position-relative">
-                <div class="right-side position-relative w-100 h-100">
-                    <div class="position-absolute color-layer"></div>
-                </div>
-                <div class="bg-text position-absolute text-center top-50 start-50 translate-middle">
-                    <img src="@/assets/logo.png" alt="logo" width="40" height="34" class="d-inline-block align-text-top"/>
-                    <h2 class="text-white fw-bolder mb-3">CLASS-SCHED</h2>
-                    <p class="text-white description">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit, voluptatum aut! Autem voluptatem dicta sequi pariatur? Itaque beatae laboriosam eveniet aut?</p>
+
+                <div class="col-md-6 d-none d-md-flex p-0 m-0 position-relative">
+                    <div class="right-side position-relative w-100 h-100">
+                        <div class="position-absolute color-layer"></div>
+                    </div>
+                    <div class="bg-text position-absolute text-center top-50 start-50 translate-middle w-75">
+                        <img src="@/assets/logo.png" alt="logo" width="44" height="36" class="d-inline-block align-text-top"/>
+                        <h2 class="text-white fw-bolder mb-3">Gestion académique intelligente</h2>
+                        <p class="text-white description">Supervisez les emplois du temps, gérez les réservations et maintenez une communication fiable entre les acteurs de l’université.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -133,13 +128,26 @@ export default {
 </script>
 
 <style>
-.form-title {
-    color: #f73b66;
-    font-weight: bolder;
+.auth-screen {
+    min-height: 100vh;
+    background: radial-gradient(circle at top right, #e8dcff, #f5f7fc 45%);
 }
 
-.form-control {
-    padding: 2% 10%;
+.auth-card {
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 22px 45px rgba(33, 44, 74, 0.14);
+    border: 1px solid #e7eaf3;
+}
+
+.auth-title {
+    color: var(--cs-accent);
+}
+
+.auth-input {
+    padding: 0.75rem 3rem;
+    border-radius: 12px;
+    border: 1px solid #dbe0ec;
 }
 
 .right-side {
@@ -170,28 +178,7 @@ export default {
 }
 
 .description {
-    font-size: 0.85rem;
-}
-
-.animate_block {
-
-  animation-name: slideIn;
-  animation-duration: 2s;
-  animation-timing-function: ease;
-  animation-delay: 0.2s;
-  animation-iteration-count: 1;
-  animation-fill-mode: forwards;
-}
-
-
-@keyframes slideIn {
-  0% {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+        font-size: 0.95rem;
+        line-height: 1.7;
 }
 </style>

@@ -1,21 +1,10 @@
 <template>
     <basic-layout>
         <template v-slot:main-title>
-            <h1 class="text-center fs-4">Gestion des d&eacute;partements</h1>
+            <h1 class="fs-4 fw-bold m-0">Gestion des départements</h1>
         </template>
         <template v-slot:main-content>
-            <div class="row">
-                <div class="col-12">
-                    <div class="d-flex justify-content-center">
-                        <router-link to="/admin/departments/create" class="mx-2 text-decoration-none">
-                            Cr&eacute;er un d&eacute;partement
-                        </router-link>
-                        <router-link to="/admin/departments/update" class="mx-2 text-decoration-none">
-                            Modifier un d&eacute;partement
-                        </router-link>
-                    </div>
-                </div>
-            </div>
+            <AdminSectionSwitcher :items="switchItems" />
             <div class="row">
                 <router-view/>
             </div>
@@ -25,11 +14,21 @@
 
 <script>
 import BasicLayout from "@/components/BasicLayout.vue"
+import AdminSectionSwitcher from '@/components/admin/AdminSectionSwitcher.vue'
 
 export default {
     name: "DepartmentManagement",
     components: {
-        BasicLayout
-    }
+        BasicLayout,
+        AdminSectionSwitcher,
+    },
+    data() {
+        return {
+            switchItems: [
+                { to: '/admin/departments/create', label: 'Créer un département' },
+                { to: '/admin/departments/update', label: 'Modifier un département' },
+            ],
+        };
+    },
 }
 </script>

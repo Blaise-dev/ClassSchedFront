@@ -1,7 +1,8 @@
 <template>
-    <div class="py-10">
-        <h2 class="text-4xl font-semibold text-center my-5">Cr&eacute;er un compte</h2>
-        <div class="block p-6 rounded-lg shadow-lg bg-white max-w-md mx-auto justify-center items-center">
+    <div class="auth-screen py-4">
+        <div class="cs-container">
+        <h2 class="fs-3 fw-bold text-center my-4">Cr&eacute;er un compte administrateur</h2>
+        <div class="block p-4 p-md-5 auth-card max-w-md mx-auto justify-center items-center">
             <Form @submit="handleRegister" :validation-schema="schema">
                 <div v-if="!successful">
                     <div class="form-group mb-6">
@@ -9,7 +10,7 @@
                             <span class="absolute inset-y-0 left-0 pl-3 text-gray-400 flex items-center text-xl leading-5">
                                 <font-awesome-icon icon="id-card"/>
                             </span>
-                            <Field class="form-control block w-full px-10 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border-b border-b-gray-300 transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-b-blue-600 focus:outline-none focus:shadow-2xl" name="pseudo" id="pseudo" type="text" placeholder="Pseudo" />
+                            <Field class="form-control auth-input block w-full px-10 py-1.5 text-base font-normal" name="pseudo" id="pseudo" type="text" placeholder="Pseudo" />
                         </div>
                         <ErrorMessage name="pseudo" class="text-sm text-red-500 error-feedback"/>
                     </div>
@@ -18,7 +19,7 @@
                             <span class="absolute inset-y-0 left-0 pl-3 text-gray-400 flex items-center text-xl leading-5">
                                 <font-awesome-icon icon="user"/>
                             </span>
-                            <Field class="form-control block w-full px-10 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border-b border-b-gray-300 transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-b-blue-600 focus:outline-none focus:shadow-2xl" name="email" id="email" type="email" placeholder="Adresse mail" />
+                            <Field class="form-control auth-input block w-full px-10 py-1.5 text-base font-normal" name="email" id="email" type="email" placeholder="Adresse mail" />
                         </div>
                         <ErrorMessage name="email" class="text-sm text-red-500 error-feedback"/>
                     </div>
@@ -27,7 +28,7 @@
                             <span class="absolute inset-y-0 left-0 pl-3 text-gray-400 flex items-center text-xl leading-5">
                                 <font-awesome-icon icon="key"/>
                             </span>
-                            <Field class="form-control block w-full px-10 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border-b border-b-gray-300 transition ease-in-out m-0 focus:text-black focus:bg-white focus:border-b-blue-600 focus:outline-none focus:shadow-2xl" name="password" id="password" :type="show ? 'password' : 'text'" placeholder="Mot de passe" />
+                            <Field class="form-control auth-input block w-full px-10 py-1.5 text-base font-normal" name="password" id="password" :type="show ? 'password' : 'text'" placeholder="Mot de passe" />
                             <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
                                 <font-awesome-icon @click="show = !show" :class="{'hidden': !show, 'block':'show'}" icon="eye"/>
                                 <font-awesome-icon @click="show = !show" :class="{'block': !show, 'hidden':'show'}" icon="eye-slash"/>
@@ -36,8 +37,7 @@
                         <ErrorMessage name="password" class="text-sm text-red-500 error-feedback"/>
                     </div>
                     <div class="form-group">
-                        <button type="submit" class="bg-sky-700 w-full hover:bg-sky-500 border-b-4 border-sky-900 text-white font-bold py-2 px-4 hover:border-sky-600 rounded" :disabled="loading">
-                            <!-- <svg class="animate-spin h-5 w-5 mr-3 ..." viewBox="0 0 24 24"></svg> -->
+                        <button type="submit" class="btn cs-btn-primary w-100" :disabled="loading">
                             <span class="uppercase">Cr&eacute;er son compte</span>
                         </button>
                     </div>
@@ -48,8 +48,9 @@
                 {{ message }}
             </div>
             <div class="mt-6">
-                <p class="text-right"> Vous avez d&eacute;j&agrave; un compte ? <router-link to="/admin/login" class="text-blue-500 hover:text-blue-700 hover:font-bold">Connectez-vous !</router-link></p>
+                <p class="text-right"> Vous avez d&eacute;j&agrave; un compte ? <router-link to="/admin/login" class="fw-bold">Connectez-vous !</router-link></p>
             </div>
+        </div>
         </div>
     </div>
 </template>
@@ -140,4 +141,20 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.auth-screen {
+    min-height: 100vh;
+    background: radial-gradient(circle at top right, #e8dcff, #f5f7fc 45%);
+}
+
+.auth-card {
+    border-radius: 18px;
+    box-shadow: 0 22px 45px rgba(33, 44, 74, 0.14);
+    border: 1px solid #e7eaf3;
+}
+
+.auth-input {
+    border-radius: 12px;
+    border: 1px solid #dbe0ec;
+}
+</style>

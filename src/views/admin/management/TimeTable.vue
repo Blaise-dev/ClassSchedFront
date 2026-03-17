@@ -1,7 +1,7 @@
 <template>
     <basic-layout>
         <template v-slot:main-title>
-            <h1 class="text-center fs-4 mb-16">Management des emplois de temps</h1>
+            <h1 class="fs-4 fw-bold m-0">Management des emplois de temps</h1>
         </template>
 
         <template v-slot:main-content>
@@ -30,7 +30,7 @@
                 Erreur ! Une erreur s'est produite lors de l'opération.
             </v-alert>
 
-            <div class="menu-container">
+            <div class="menu-container cs-card p-3 mb-3">
             <div class="select-container">
                 <v-select
                 v-model="selectedTeacher"
@@ -100,7 +100,7 @@
 
             </div>
 
-            <div class="row">
+            <div class="row mt-2">
                 <div class="row w-50 m-auto">
 
                     <div class="form-group w-25 mr-2">
@@ -124,7 +124,7 @@
                     ></v-select>
                 </div>
             </div>
-            <time-table-edit :initial-data="initialData" @selected-data-changed="handleSelectedDataChange" v-if="!isLoading" class="w-75 m-auto"></time-table-edit>
+            <time-table-edit :initial-data="initialData" @selected-data-changed="handleSelectedDataChange" v-if="!isLoading" class="w-100 m-auto cs-card p-2"></time-table-edit>
             
             <div class="loader-container mt-16">
 
@@ -364,16 +364,23 @@
 <style scoped>
     .select-container {
         display: flex;
-        width: 594px;
+        width: 100%;
         margin: auto;
+        flex-wrap: wrap;
+        gap: 0.5rem;
     }
 
     .menu-container {
         display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        border: 1px solid var(--cs-border);
     }
 
     .button-container {
         display: flex;
+        align-items: center;
+        gap: 0.4rem;
     }
 
     .loader-container {
@@ -406,5 +413,16 @@
     .disabled {
         opacity: 0.5; /* Réduire l'opacité pour indiquer qu'il est désactivé */
         pointer-events: none; /* Désactiver les interactions avec le bouton */
+    }
+
+    @media (max-width: 992px) {
+        .button-container {
+            width: 100%;
+            justify-content: flex-start;
+        }
+
+        .row.w-50.m-auto {
+            width: 100% !important;
+        }
     }
 </style>
