@@ -20,7 +20,7 @@
                                 <span class="position-absolute px-4">
                                     <font-awesome-icon icon="user"></font-awesome-icon>
                                 </span>
-                                <Field class="form-control auth-input" name="login" id="login" placeholder="Login"/>
+                                <Field class="form-control auth-input" name="login" id="login" placeholder="Email administrateur"/>
                             </div>
                             <ErrorMessage name="login" class="text-danger mt-2 error-field"/>
                         </div>

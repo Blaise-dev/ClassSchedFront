@@ -3,8 +3,7 @@ export default function authHeader() {
 
     if (admin && admin.token) {
         return {
-            'x-access-token': admin.token,
-            'Content-Type': 'multipart/form-data'
+            'x-access-token': admin.token
         };
     } else {
         return {};

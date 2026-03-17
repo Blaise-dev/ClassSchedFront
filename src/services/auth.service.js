@@ -1,12 +1,12 @@
 import axios from "axios";
 
-const AUTH_URL = `${(process.env.VUE_APP_API_URL || 'http://127.0.0.1:8000').replace(/\/$/, '')}/auth/admin/`;
+const AUTH_URL = `${(process.env.VUE_APP_API_URL || 'http://127.0.0.1:8000').replace(/\/$/, '')}/utilisateur/auth/admin/`;
 
 class AuthService {
     login(admin) {
         return axios
             .post(AUTH_URL + 'signin', {
-                pseudo: admin.pseudo,
+                login: admin.login || admin.pseudo,
                 password: admin.password
             }).then(
                 (response) => {
@@ -14,11 +14,6 @@ class AuthService {
                         localStorage.setItem('admin', JSON.stringify(response.data));
                     }
                     return response.data;
-                }
-            ).catch(
-                (error) => {
-                    console.log(error);
-                    return error;
                 }
             );
     }

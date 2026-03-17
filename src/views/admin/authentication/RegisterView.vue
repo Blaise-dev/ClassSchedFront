@@ -68,16 +68,11 @@ export default {
     },
     data() {
         const schema = yup.object().shape({
-            name: yup
+            pseudo: yup
                 .string()
-                .required("Le nom est requis.")
-                .min(4, "Doit contenir au moins 4 caracteres!")
-                .max(15, "Doit contenir au plus 15 caracteres!"),
-            surname: yup
-                .string()
-                .required("Le prenom est requis.")
-                .min(4, "Doit contenir au moins 4 caracteres!")
-                .max(15, "Doit contenir au plus 15 caracteres!"),
+                .required("Le pseudo est requis.")
+                .min(3, "Doit contenir au moins 3 caractères!")
+                .max(30, "Doit contenir au plus 30 caractères!"),
             email: yup
                 .string()
                 .required("L'adresse mail est requise.")
@@ -86,12 +81,8 @@ export default {
             password: yup
                 .string()
                 .required("Le mot de passe est requis.")
-                .matches(
-                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
-                    "Doit contenir au moins 8 caracteres, une majuscule(A-Z), une minuscule(a-z), un chiffre et un caractere parmi les suivants : ! @ # $ % ^ & *."
-                ),
-                // .min(8, "Doit contenir au moins 8 caracteres!")
-                // .max(35, "Doit contenir au plus 35 caracteres!"),
+                .min(6, "Doit contenir au moins 6 caractères!")
+                .max(10, "Doit contenir au plus 10 caractères (contrainte backend)."),
         });
 
         return {

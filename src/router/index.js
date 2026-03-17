@@ -163,4 +163,18 @@ const router = createRouter({
   routes
 })
 
+router.beforeEach((to, from, next) => {
+  const admin = JSON.parse(localStorage.getItem('admin') || 'null')
+  const isLoggedIn = !!(admin && admin.token)
+  const isAdminRoute = to.path.startsWith('/admin')
+  const isAuthPage = to.path === '/admin/login' || to.path === '/admin/register'
+
+  if (isAdminRoute && !isAuthPage && !isLoggedIn) {
+    next('/admin/login')
+    return
+  }
+
+  next()
+})
+
 export default router
