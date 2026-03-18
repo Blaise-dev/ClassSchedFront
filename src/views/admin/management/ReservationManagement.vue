@@ -1,12 +1,6 @@
 <template>
-    <BasicLayout>
-        <template v-slot:main-title>
-            <h1 class="fs-4 fw-bold m-0">Réservations de salle</h1>
-        </template>
-
-        <template v-slot:main-content>
-            
-            <v-alert
+    <admin-dashboard-layout>
+        <v-alert
                 v-if="isSuccess"
                 dismissible
                 type="success"
@@ -30,164 +24,336 @@
                 Erreur ! Une erreur s'est produite lors de l'opération.
             </v-alert>
 
-            <div class="cs-card p-3 p-md-4">
-            <p class="text-h6 text-grey-darken-1 w-100 text-left m-auto">Faites une réservation de salle</p>
-            <br>
-            <p class="text-block alert alert-danger text-body-1 w-100 text-left m-auto">
-                <span class="font-weight-bold">Attention</span> ! vous ne pouvez pas faire de demande de réservation pour une salle, à une même heure déjà réservée.
-            </p>
-            <h1 class="text-h6 w-100 text-left m-auto">Remplissez le formulaire ci-dessous pour demander une salle</h1>
+            <section class="reservation-page">
+                <div class="reservation-hero">
+                    <div>
+                        <span class="reservation-kicker">Demande encadrée</span>
+                        <h2>Faites une réservation de salle</h2>
+                        <p>Remplissez le formulaire ci-dessous pour envoyer une demande claire et exploitable par l'administration.</p>
+                    </div>
+                    <div class="reservation-hero-note">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>Validation plus rapide avec des informations complètes</span>
+                    </div>
+                </div>
 
-            <div class="d-flex justify-center pr-16 w-100">
+                <div class="reservation-warning" role="alert">
+                    <i class="fas fa-triangle-exclamation"></i>
+                    <span><strong>Attention :</strong> vous ne pouvez pas réserver une salle déjà occupée au même horaire.</span>
+                </div>
 
-                <form class="block-reservation text-left mt-4 p-4 border w-100 row" v-if="!isLoading">
-                <div class="container">
-                    <p class="text-body-1 font-weight-bold col-md-10">Les champs marqués d’un (<span class="font-weight-bold text-danger">*</span>) sont obligatoires</p>
+                <form class="reservation-form" v-if="!isLoading" @submit.prevent="newReservation">
+                    <p class="required-note">Les champs marqués d’un <span>*</span> sont obligatoires.</p>
 
-                    <div class="form-group">
-                    <label class="text-grey font-weight-bold" for="salle">Quelle salle voulez-vous réserver ? <span class="font-weight-bold text-danger">*</span></label>
-                    <select id="salle" class="form-control" v-model="selectedSalle">
-                        <option value="">Salle</option>
-                        <option value="salle1">Salle 1</option>
-                        <option value="salle2">Salle 2</option>
-                        <option value="salle3">Salle 3</option>
-                    </select>
+                    <div class="form-grid">
+                        <div class="form-group form-group-full">
+                            <label for="salle">Salle <span>*</span></label>
+                            <select id="salle" class="form-control" v-model="selectedSalle" required>
+                                <option value="">Choisir une salle</option>
+                                <option v-for="salle in salles" :key="salle.codeSalle" :value="salle.codeSalle">{{ salle.nomSalle }} ({{ salle.codeSalle }})</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="date_reservation">Date <span>*</span></label>
+                            <input type="date" id="date_reservation" class="form-control" v-model="selectedDate" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="heure_debut">Heure de début <span>*</span></label>
+                            <input type="time" id="heure_debut" class="form-control" v-model="selectedHeureDebut" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="heure_fin">Heure de fin <span>*</span></label>
+                            <input type="time" id="heure_fin" class="form-control" v-model="selectedHeureFin" required>
+                        </div>
+
+                        <div class="form-group form-group-full">
+                            <label for="motif">Motif</label>
+                            <textarea id="motif" class="form-control" rows="4" v-model="motif" placeholder="Précisez le contexte de la réservation..."></textarea>
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                    <label class="text-grey font-weight-bold mt-10" for="date_reservation">A quelle date voulez-vous réserver cette salle ? <span class="font-weight-bold text-danger">*</span></label>
-                    <input type="date" id="date_reservation" class="form-control" v-model="selectedDate" required>
-                    </div>
-
-                    <div class="form-group">
-                    <label class="text-grey font-weight-bold mt-10" for="heure_debut">Heure de début <span class="font-weight-bold text-danger">*</span></label>
-                    <input type="text" id="heure_debut" class="form-control" v-model="selectedHeureDebut" required>
-                    </div>
-
-                    <div class="form-group">
-                    <label class="text-grey font-weight-bold mt-10" for="heure_fin">Heure de fin <span class="font-weight-bold text-danger">*</span></label>
-                    <input type="text" id="heure_fin" class="form-control" v-model="selectedHeureFin" required>
-                    </div>
-
-                    <div class="form-group">
-                    <label class="text-grey font-weight-bold mt-10" for="motif">Pour quelle raison souhaitez-vous réserver cette salle ?</label>
-                    <textarea id="motif" class="form-control" v-model="motif"></textarea>
-                    </div>
-
-                    <v-btn class="btn cs-btn-primary text-white w-100 mt-6" @click="newReservation">
-                        Consulter
+                    <v-btn type="submit" class="cs-btn-primary reservation-submit" block>
+                        Envoyer la demande
                     </v-btn>
-                </div>
                 </form>
-            
-                <div class="loader-container mt-16">
 
-                    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-                    <v-progress-circular
-                        v-if="isLoading"
-                        indeterminate
-                        color="primary"
-                    ></v-progress-circular>
-                    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-
-                    <!-- Contenu de votre application -->
+                <div class="loader-container" v-else>
+                    <v-progress-circular indeterminate color="primary" size="68"></v-progress-circular>
                 </div>
-
-            </div>
-            </div>
-            <!-- ... le reste du code ... -->
-        </template>
-    </BasicLayout>
+            </section>
+    </admin-dashboard-layout>
 </template>
 
 <script>
-    import BasicLayout from '@/components/BasicLayout.vue'
-    import { Form, Field, ErrorMessage } from 'vee-validate'
+    import AdminDashboardLayout from '@/layouts/AdminDashboardLayout.vue'
     import adminService from '@/services/admin.service'
 
     export default {
         name: 'ReservationManagement',
         components: {
-            Form,
-            Field,
-            ErrorMessage,
-            BasicLayout
+            AdminDashboardLayout
         },
         data() {
             return {
+                salles: [],
                 selectedSalle: '',
                 selectedDate: '',
                 selectedHeureDebut: '',
                 selectedHeureFin: '',
                 motif: '',
+                message: '',
     
                 isLoading: false, // Variable indiquant si le chargement est en cours
                 isSuccess: false, // Variable indiquant si l'opération a réussi
                 isError: false, // Variable indiquant si l'opération a réussi
             };
         },
-        mounted() {},
+        mounted() {
+            this.loadSalles();
+        },
         created() {},
         computed: {},
         methods: {
-            // ... le reste du code ...
+            async loadSalles() {
+                try {
+                    const response = await adminService.getSalles();
+                    this.salles = Array.isArray(response?.data) ? response.data : [];
+                } catch (error) {
+                    this.message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+                    this.isError = true;
+                }
+            },
 
-            newReservation() {
-                this.isLoading = true; // Début du chargement au clic sur le bouton "Valider"
+            async newReservation() {
+                if (!this.selectedSalle || !this.selectedDate || !this.selectedHeureDebut || !this.selectedHeureFin) {
+                    this.isError = true;
+                    this.message = 'Veuillez renseigner tous les champs obligatoires.';
+                    return;
+                }
 
-                // Effectuez ici votre logique de traitement ou d'appel à l'API
+                this.isLoading = true;
+                this.isError = false;
+                this.isSuccess = false;
 
-                // Simulez une pause de 2 secondes avant de terminer le chargement
-                setTimeout(() => {
-                    this.isLoading = false; // Fin du chargement après un délai simulé
-                    this.isSuccess = true; // Affiche l'alerte de succès
+                try {
+                    await adminService.addReservation({
+                        salle: this.selectedSalle,
+                        date: this.selectedDate,
+                        debut: this.selectedHeureDebut,
+                        fin: this.selectedHeureFin,
+                        motif: this.motif,
+                    });
 
-                    // Masque l'alerte de succès après 3 secondes (ajustez selon vos besoins)
-                    setTimeout(() => {
-                        this.isSuccess = false;
-                    }, 3000);
-                }, 2000);
-            
-                // Logique de réservation d'une salle.
+                    this.isSuccess = true;
+                    this.selectedSalle = '';
+                    this.selectedDate = '';
+                    this.selectedHeureDebut = '';
+                    this.selectedHeureFin = '';
+                    this.motif = '';
+                } catch (error) {
+                    this.message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+                    this.isError = true;
+                } finally {
+                    this.isLoading = false;
+                }
             },
 
             dismissAlert() {
-                // Masque l'alerte de succès si l'utilisateur la ferme manuellement
                 this.isSuccess = false;
+                this.isError = false;
             },
         },
     }
 </script>
 
 <style scoped>
-    .reservation-section {
-        background-color: #f1f1f1;
-        border-radius: 5px;
-    }
-
-    .reservations {
-        border-top: none;
-        border-left: none;
-        border-right: none;
-        border-bottom: 1px solid #cfcfcf;
-        padding: 0.7%;
-    }
-
-    .new-dot {
-        font-size: 0.6rem;
-        color: #f73b66;
-        margin-left: 5%;
-    }
-
     .alert-width {
-        max-width: 33.33%; /* 4 colonnes sur 12 */
+        max-width: 33.33%;
         z-index: 9999;
     }
 
-    .block-reservation {
-        border-radius: 14px;
-        border-color: var(--cs-border) !important;
-        box-shadow: var(--cs-shadow);
+    .reservation-page {
+        background: linear-gradient(180deg, #ffffff, #fbfcff);
+        color: #151b31;
+        border: 1px solid #e5e8f2;
+        border-radius: 24px;
+        padding: 1.4rem;
+        box-shadow: 0 18px 38px rgba(17, 24, 52, 0.08);
+    }
+
+    .reservation-hero {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #edf1f8;
+    }
+
+    .reservation-kicker {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.38rem 0.78rem;
+        border-radius: 999px;
+        background: rgba(91, 44, 255, 0.1);
+        color: #5b2cff;
+        font-size: 0.78rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    .reservation-hero h2 {
+        margin: 0.85rem 0 0;
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #1a2240;
+    }
+
+    .reservation-hero p {
+        margin: 0.45rem 0 0;
+        color: #5d6683;
+        max-width: 640px;
+        line-height: 1.7;
+    }
+
+    .reservation-hero-note {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        padding: 0.85rem 1rem;
+        border-radius: 16px;
+        background: #f7f8ff;
+        border: 1px solid #e5e9f6;
+        color: #39425f;
+        font-weight: 700;
+        font-size: 0.88rem;
+    }
+
+    .reservation-warning {
+        margin-top: 1rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.65rem;
+        background: linear-gradient(180deg, #fff8eb, #fff3df);
+        border: 1px solid #ffd7a1;
+        border-radius: 16px;
+        padding: 0.95rem 1rem;
+        color: #7f4c08;
+        font-size: 0.94rem;
+    }
+
+    .reservation-form {
+        margin-top: 1.25rem;
+    }
+
+    .required-note {
+        margin: 0 0 0.8rem;
+        color: #596385;
+        font-weight: 600;
+    }
+
+    .required-note span,
+    .form-group label span {
+        color: #d74252;
+        font-weight: 800;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.9rem;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    .form-group-full {
+        grid-column: 1 / -1;
+    }
+
+    .form-group label {
+        font-weight: 700;
+        color: #2b3452;
+        font-size: 0.92rem;
+    }
+
+    .form-control {
+        height: 52px;
+        border-radius: 16px;
+        border: 1px solid #d8dff0;
+        color: #1a223d;
+        background: #fbfcff;
+        padding: 0 0.95rem;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    textarea.form-control {
+        height: auto;
+        min-height: 136px;
+        resize: vertical;
+        padding-top: 0.9rem;
+    }
+
+    .form-control:focus {
+        border-color: #7d63f8;
+        background: #ffffff;
+        box-shadow: 0 0 0 4px rgba(125, 99, 248, 0.12);
+    }
+
+    .reservation-submit {
+        margin-top: 1.15rem;
+        width: 100%;
+        min-height: 52px;
+        font-weight: 700;
+        border-radius: 16px;
+        letter-spacing: 0.01em;
+    }
+
+    .loader-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 260px;
+    }
+
+    @media (max-width: 900px) {
+        .reservation-hero {
+            flex-direction: column;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .alert-width {
+            max-width: 92%;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .reservation-page {
+            padding: 0.85rem;
+        }
+
+        .reservation-hero h2 {
+            font-size: 1.14rem;
+        }
+
+        .reservation-warning {
+            font-size: 0.88rem;
+        }
+
+        .form-control {
+            height: 44px;
+            font-size: 0.92rem;
+        }
     }
 
 </style>

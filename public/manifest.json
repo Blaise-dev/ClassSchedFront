@@ -1,0 +1,22 @@
+{
+  "name": "ClassSched - Emploi de Temps",
+  "short_name": "ClassSched",
+  "description": "Gestion des emplois de temps et réservations de salles",
+  "start_url": "/",
+  "background_color": "#ffffff",
+  "theme_color": "#007bff",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

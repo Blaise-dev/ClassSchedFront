@@ -60,7 +60,7 @@ export default {
 
 <style scoped>
 .sidebar-list {
-    background-color: #fff;
+    background: transparent;
 }
 
 .side-items {
@@ -72,7 +72,7 @@ export default {
 }
 
 .side-link {
-    color: #4d5565;
+    color: #dce3ff;
     display: block;
     padding: 0.7rem 0.5rem;
     border-radius: 10px;
@@ -81,8 +81,8 @@ export default {
 
 .side-link:hover,
 .active-link {
-    background: #efeafb;
-    color: var(--cs-primary);
+    background: rgba(91, 44, 255, 0.2);
+    color: #ffffff;
 }
 
 .sub-text {

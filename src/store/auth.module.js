@@ -1,9 +1,20 @@
 import AuthService from '../services/auth.service';
 
-const admin = JSON.parse(localStorage.getItem('admin'));
-const initialState = admin
-    ? { status: {loggedIn: true}, admin }
-    : { status: {loggedIn: false}, admin: null };
+let admin = null;
+try {
+    admin = JSON.parse(localStorage.getItem('admin') || 'null');
+} catch (_) {
+    admin = null;
+}
+
+const hasValidToken = !!(admin && admin.token);
+if (!hasValidToken) {
+    localStorage.removeItem('admin');
+}
+
+const initialState = hasValidToken
+    ? { status: { loggedIn: true }, admin }
+    : { status: { loggedIn: false }, admin: null };
 
 export const auth = {
     namespaced: true,

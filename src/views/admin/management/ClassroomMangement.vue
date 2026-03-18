@@ -1,34 +1,90 @@
 <template>
-    <basic-layout>
-        <template v-slot:main-title>
-            <h1 class="fs-4 fw-bold m-0">Gestion des salles</h1>
-        </template>
-        <template v-slot:main-content>
-            <AdminSectionSwitcher :items="switchItems" />
-            <div class="row">
-                <router-view/>
-            </div>
-        </template>
-    </basic-layout>
+    <admin-dashboard-layout>
+        <data-table
+            title="Salles"
+            subtitle="Créer, modifier et supprimer les salles"
+            :items="items"
+            :columns="columns"
+            :loading="loading"
+            :error="error"
+            @create="handleCreate"
+            @edit="handleEdit"
+            @delete="handleDelete"
+            @retry="loadItems"
+        />
+    </admin-dashboard-layout>
 </template>
 
 <script>
-import BasicLayout from '@/components/BasicLayout.vue';
-import AdminSectionSwitcher from '@/components/admin/AdminSectionSwitcher.vue'
+import DataTable from '@/components/admin/DataTable.vue'
+import AdminDashboardLayout from '@/layouts/AdminDashboardLayout.vue'
+import adminService from '@/services/admin.service'
 
 export default {
     name: 'ClassroomManagement',
     components: {
-        BasicLayout,
-        AdminSectionSwitcher,
+        DataTable,
+        AdminDashboardLayout,
     },
     data() {
         return {
-            switchItems: [
-                { to: '/admin/classrooms/create', label: 'Créer une salle' },
-                { to: '/admin/classrooms/update', label: 'Modifier une salle' },
+            loading: false,
+            error: null,
+            items: [],
+            columns: [
+                { key: 'codeSalle', label: 'Code salle', sortable: true },
+                { key: 'nomSalle', label: 'Nom salle', sortable: true },
             ],
-        };
+        }
     },
+    mounted() {
+        this.loadItems()
+    },
+    methods: {
+        async loadItems() {
+            this.loading = true
+            this.error = null
+            try {
+                const response = await adminService.getSalles()
+                this.items = response.data || []
+            } catch (error) {
+                this.error = (error.response && error.response.data && error.response.data.message) || 'Impossible de charger les salles.'
+            } finally {
+                this.loading = false
+            }
+        },
+        async handleCreate() {
+            try {
+                const code = window.prompt('Code salle (ex: S006)')
+                if (!code) return
+                const name = window.prompt('Nom salle')
+                if (!name) return
+                await adminService.addClassroom({ code, name })
+                await this.loadItems()
+            } catch (error) {
+                this.error = (error.response && error.response.data && error.response.data.message) || 'Création salle impossible.'
+            }
+        },
+        async handleEdit(item) {
+            try {
+                const codeNew = window.prompt('Nouveau code salle', item.codeSalle)
+                if (!codeNew) return
+                const name = window.prompt('Nouveau nom salle', item.nomSalle)
+                if (!name) return
+                await adminService.updateClassroom({ code: item.codeSalle, codeNew, name })
+                await this.loadItems()
+            } catch (error) {
+                this.error = (error.response && error.response.data && error.response.data.message) || 'Modification salle impossible.'
+            }
+        },
+        async handleDelete(item) {
+            try {
+                await adminService.deleteClassroom({ code: item.codeSalle })
+                await this.loadItems()
+            } catch (error) {
+                this.error = (error.response && error.response.data && error.response.data.message) || 'Suppression salle impossible.'
+            }
+        }
+    }
 }
 </script>

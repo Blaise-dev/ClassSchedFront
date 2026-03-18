@@ -48,9 +48,6 @@
                     </div>
                 </div>
             </section>
-            <section class="text-center mt-4 mb-3">
-                <router-link to="/reservations/" class="fw-bold text-decoration-underline">Gérer les demandes de réservation</router-link>
-            </section>
         </template>
     </default-layout>
 </template>

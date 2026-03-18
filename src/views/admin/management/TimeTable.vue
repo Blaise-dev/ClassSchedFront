@@ -1,10 +1,12 @@
 <template>
-    <basic-layout>
-        <template v-slot:main-title>
-            <h1 class="fs-4 fw-bold m-0">Management des emplois de temps</h1>
-        </template>
-
-        <template v-slot:main-content>
+    <admin-dashboard-layout>
+        <section class="tt-page-intro tt-surface p-4 mb-4">
+            <div class="tt-page-intro-copy">
+                <span class="tt-kicker">Pilotage du planning</span>
+                <h2 class="tt-title">Construisez et mettez à jour les emplois du temps avec plus de contrôle</h2>
+                <p class="tt-subtitle">Sélectionnez la filière, l'année et la période souhaitées puis modifiez directement la grille.</p>
+            </div>
+        </section>
             
             <v-alert
                 v-if="isSuccess"
@@ -30,8 +32,8 @@
                 Erreur ! Une erreur s'est produite lors de l'opération.
             </v-alert>
 
-            <div class="menu-container cs-card p-3 mb-3">
-            <div class="select-container">
+            <div class="menu-container tt-surface p-3 p-md-4 mb-3">
+            <div class="select-container tt-controls-grid">
                 <v-select
                 v-model="selectedTeacher"
                 :items="teachers"
@@ -40,9 +42,9 @@
                 item-title = "text"
                 item-value = "value"
                 label="Enseignant"
-                variant="solo"
-                class="w-25 mr-2"
-                :disabled="true"
+                variant="outlined"
+                density="comfortable"
+                class="tt-field"
                 ></v-select>
 
                 <v-select
@@ -53,8 +55,9 @@
                 item-title = "text"
                 item-value = "value"
                 label="Filière"
-                variant="solo"
-                class="w-25 mr-2"
+                variant="outlined"
+                density="comfortable"
+                class="tt-field"
                 ></v-select>
 
                 <v-select
@@ -65,8 +68,9 @@
                 item-title = "text"
                 item-value = "value"
                 label="Niveau"
-                variant="solo"
-                class="w-25"
+                variant="outlined"
+                density="comfortable"
+                class="tt-field"
                 :disabled="!selectedMajor"
                 ></v-select>
 
@@ -78,37 +82,40 @@
                 item-title = "text"
                 item-value = "value"
                 label="Option"
-                variant="solo"
-                class="w-25 mr-2"
+                variant="outlined"
+                density="comfortable"
+                class="tt-field"
                 :disabled="!selectedLevel"
                 ></v-select>
 
-                <v-btn class="ml-sm-16" icon color="white" :disabled="!(selectedOption && selectedDateDebut && selectedDateFin)" :class="{ 'disabled': !(selectedOption && selectedDateDebut && selectedDateFin) }" @click="loadEmploi">
+                <v-btn class="tt-action-btn tt-action-search" icon variant="tonal" color="primary" :disabled="!(selectedOption && selectedDateDebut && selectedDateFin)" :class="{ 'disabled': !(selectedOption && selectedDateDebut && selectedDateFin) }" @click="loadEmploi">
                     <v-icon>mdi-magnify</v-icon>
                 </v-btn>
             </div>
 
-            <div class="button-container mr-sm-12">
-                <v-btn class="mr-sm-16" icon color="red" @click="deleteEmploi">
+            <div class="button-container tt-button-group">
+                <v-btn class="tt-action-btn" icon variant="tonal" color="error" @click="deleteEmploi">
                     <v-icon>mdi-delete</v-icon>
                 </v-btn>
 
-                <v-btn class="mr-sm-16" icon color="green" @click="confirmEmploi">
+                <v-btn class="tt-action-btn" icon variant="tonal" color="success" @click="confirmEmploi">
                     <v-icon>mdi-check</v-icon>
                 </v-btn>
             </div>
 
             </div>
 
-            <div class="row mt-2">
-                <div class="row w-50 m-auto">
+            <div class="row mt-2 mb-3">
+                <div class="row w-100 m-auto tt-date-row tt-surface tt-date-panel p-3 p-md-4">
 
-                    <div class="form-group w-25 mr-2">
-                        <input type="date" id="date_debut" class="form-control" style="height: 55px; box-shadow: 0 2px 0px rgba(0, 0, 0, .3);" title="Date de début" v-model="selectedDateDebut">
+                    <div class="form-group col-12 col-md-4">
+                        <label class="tt-label" for="date_debut">Date de début</label>
+                        <input type="date" id="date_debut" class="form-control tt-input" title="Date de début" v-model="selectedDateDebut">
                     </div>
 
-                    <div class="form-group w-25 mr-2">
-                        <input type="date" id="date_fin" class="form-control" style="height: 55px; box-shadow: 0 2px 0px rgba(0, 0, 0, .3);" title="Date de début" v-model="selectedDateFin">
+                    <div class="form-group col-12 col-md-4">
+                        <label class="tt-label" for="date_fin">Date de fin</label>
+                        <input type="date" id="date_fin" class="form-control tt-input" title="Date de fin" v-model="selectedDateFin">
                     </div>
 
                     <v-select
@@ -119,12 +126,22 @@
                         item-title="text"
                         item-value="value"
                         label="Année"
-                        variant="solo"
-                        class="w-25 mr-2"
+                        variant="outlined"
+                        density="comfortable"
+                        class="col-12 col-md-4 tt-year-field"
                     ></v-select>
                 </div>
             </div>
-            <time-table-edit :initial-data="initialData" @selected-data-changed="handleSelectedDataChange" v-if="!isLoading" class="w-100 m-auto cs-card p-2"></time-table-edit>
+            <time-table-edit
+                :initial-data="initialData"
+                :ue-options="ueCatalog"
+                :teacher-options="teacherCatalog"
+                :room-options="roomCatalog"
+                :default-teacher="selectedTeacher"
+                @selected-data-changed="handleSelectedDataChange"
+                v-if="!isLoading"
+                class="w-100 m-auto tt-surface p-2 tt-table-wrap"
+            ></time-table-edit>
             
             <div class="loader-container mt-16">
 
@@ -138,236 +155,450 @@
                 <!-- Contenu de votre application -->
             </div>
             <!-- ... le reste du code ... -->
-        </template>
-    </basic-layout>
+    </admin-dashboard-layout>
 </template>
 
 <script>
-    import BasicLayout from "@/components/BasicLayout.vue"
+import AdminDashboardLayout from "@/layouts/AdminDashboardLayout.vue"
+import adminService from '@/services/admin.service'
+import TimeTableEdit from '@/components/admin/TimeTableEdit.vue'
+import { convertToTimetable } from '@/views/utils.js';
 
-    import adminService from '@/services/admin.service'
-    import TimeTableEdit from '@/components/admin/TimeTableEdit.vue'
+const DAY_TO_API = {
+    Lundi: 'lundi',
+    Mardi: 'mardi',
+    Mercredi: 'mercredi',
+    Jeudi: 'jeudi',
+    Vendredi: 'vendredi',
+    Samedi: 'samedi',
+    Dimanche: 'dimanche',
+};
 
-    import { convertToTimetable } from '@/views/utils.js';
-    import { toRaw } from 'vue'
-
-    export default {
-        name: "TimeTable",
-        components: {
-            BasicLayout,
-            TimeTableEdit,
-        },
-        data() {
-            return {
-                initialData: {
-                    // Les données initiales de l'emploi du temps
-                    '7:00': {
-                        Lundi: { ue: 'MAT141', teacher: 'enseignant1@example.com', room: 'S006' },
-                        Jeudi: { ue: 'INF4065', teacher: 'enseignant2@example.com', room: 'S006' },
-                        // ... autres jours de la semaine
-                    },
-                    '8:00': {
-                        Lundi: { ue: 'PHY245', teacher: 'enseignant2@example.com', room: 'AIII' },
-                        Mardi: { ue: 'MAT122', teacher: 'enseignant2@example.com', room: 'AI' },
-                        // ... autres jours de la semaine
-                    },
-                    // ... autres heures de la journée
-                },
-                parentSelectedData: [], // Ajoutez une propriété pour stocker la matrice selectedData du composant enfant
-                teachers: [
-                { text: 'Enseignant 1', value: 'teacher1' },
-                { text: 'Enseignant 2', value: 'teacher2' },
-                { text: 'Enseignant 3', value: 'teacher3' }
-                ],
-                options: [],
-                majors: [],
-                levels: [],
-                years: [
+export default {
+    name: "TimeTable",
+    components: {
+        AdminDashboardLayout,
+        TimeTableEdit,
+    },
+    data() {
+        return {
+            initialData: {},
+            parentSelectedData: {},
+            teachers: [],
+            options: [],
+            majors: [],
+            levels: [],
+            ueCatalog: [],
+            allUeCatalog: [],
+            roomCatalog: [],
+            teacherCatalog: [],
+            years: [
                 { text: '2023/2024', value: '2023/2024' },
                 { text: '2022/2023', value: '2022/2023' },
-                ],
-
-                selectedTeacher: null,
-                selectedOption: null,
-                selectedMajor: null,
-                selectedLevel: null,
-                selectedDateDebut: '2023-10-19',
-                selectedDateFin: '2024-02-27',
-                selectedYear: "2023/2024",
-    
-                isLoading: false, // Variable indiquant si le chargement est en cours
-                isSuccess: false, // Variable indiquant si l'opération a réussi
-                isError: false, // Variable indiquant si l'opération a réussi
-            };
+            ],
+            selectedTeacher: null,
+            selectedOption: null,
+            selectedMajor: null,
+            selectedLevel: null,
+            selectedDateDebut: '2023-10-19',
+            selectedDateFin: '2024-02-27',
+            selectedYear: "2023/2024",
+            isLoading: false,
+            isSuccess: false,
+            isError: false,
+            message: '',
+        };
+    },
+    watch: {
+        selectedDateDebut() {
+            this.isSuccess = false;
         },
-        watch: {
-            selectedDateDebut(selectedDateDebut) {
-                // Code à exécuter.
-            },
-            selectedDateFin(selectedDateFin) {
-                // Code à exécuter.
-            },
-            selectedYear(selectedYear) {
-                // Code à exécuter.
-            },
-            selectedMajor(selectedMajor) {
-
-                // On rempli la liste des niveaux de la filière.
-                adminService.getLevelsFiliere(selectedMajor).then(
-                    (response) => {
-                        var niveaux = response.data;
-
-                        this.levels = niveaux.map((niveau) => {
-                            return {
-                                text: niveau.nom,
-                                value: niveau.codeNiveau,
-                            };
-                        });
-                        this.selectedLevel = null;
-                    },
-                    (error) => {
-                        this.message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
-                        console.log("Error : " + this.message)
-                    }
-                )
-            },
-            selectedLevel(selectedLevel) {
-
-                // On rempli la liste des niveaux de la filière.
-                adminService.getOptionsLevel(selectedLevel).then(
-                    (response) => {
-                        var options = response.data;
-
-                        this.options = options.map((option) => {
-                            return {
-                                text: option.nom,
-                                value: option.codeOption,
-                            };
-                        });
-                        this.selectedOption = null;
-                    },
-                    (error) => {
-                        this.message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
-                        console.log("Error : " + this.message)
-                    }
-                )
+        selectedDateFin() {
+            this.isSuccess = false;
+        },
+        selectedYear() {
+            this.isSuccess = false;
+        },
+        async selectedMajor(selectedMajor) {
+            if (!selectedMajor) {
+                this.levels = [];
+                this.selectedLevel = null;
+                return;
+            }
+            try {
+                const response = await adminService.getLevelsFiliere(selectedMajor);
+                const niveaux = Array.isArray(response?.data) ? response.data : [];
+                this.levels = niveaux.map((niveau) => ({
+                    text: niveau.nom,
+                    value: niveau.codeNiveau,
+                }));
+                this.selectedLevel = null;
+            } catch (error) {
+                this.message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+                this.isError = true;
             }
         },
-        created() {
+        async selectedLevel(selectedLevel) {
+            if (!selectedLevel) {
+                this.options = [];
+                this.selectedOption = null;
+                this.ueCatalog = [...this.allUeCatalog];
+                return;
+            }
+            try {
+                const response = await adminService.getOptionsLevel(selectedLevel);
+                const options = Array.isArray(response?.data) ? response.data : [];
+                this.options = options.map((option) => ({
+                    text: option.nom,
+                    value: option.codeOption,
+                }));
+                this.selectedOption = null;
+            } catch (error) {
+                this.message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+                this.isError = true;
+            }
+        },
+        async selectedOption(selectedOption) {
+            if (!selectedOption) {
+                this.ueCatalog = [...this.allUeCatalog];
+                return;
+            }
 
+            try {
+                const response = await adminService.getUesByOption(selectedOption);
+                const ues = Array.isArray(response?.data) ? response.data : [];
+                const mapped = ues.map((item) => ({
+                    code: item.codeUE,
+                    intitulé: item.intitulé || item.codeUE,
+                }));
+                this.ueCatalog = mapped.length ? mapped : [...this.allUeCatalog];
+            } catch (error) {
+                this.ueCatalog = [...this.allUeCatalog];
+                this.message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+                this.isError = true;
+            }
+        }
+    },
+    async created() {
+        await Promise.all([this.loadFilieres(), this.loadReferenceData()]);
+    },
+    methods: {
+        async loadReferenceData() {
+            try {
+                const [uesResponse, sallesResponse, enseignantsResponse] = await Promise.all([
+                    adminService.getUEs(),
+                    adminService.getSalles(),
+                    adminService.getEnseignants(),
+                ]);
 
-            // On rempli la liste des filières.
-            adminService.getTimeTable({id: 'L1', annee: '2023'}).then(
-                (response) => {
-                    var timetable = response.data;
-                    convertToTimetable(timetable)
-                },
-                (error) => {
-                    this.message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
-                    console.log("Error : " + this.message)
+                const ues = Array.isArray(uesResponse?.data) ? uesResponse.data : [];
+                const salles = Array.isArray(sallesResponse?.data) ? sallesResponse.data : [];
+                const enseignants = Array.isArray(enseignantsResponse?.data) ? enseignantsResponse.data : [];
+
+                this.allUeCatalog = ues.map((item) => ({
+                    code: item.codeUE,
+                    intitulé: item.intitulé || item.codeUE,
+                }));
+                this.ueCatalog = [...this.allUeCatalog];
+
+                this.roomCatalog = salles.map((item) => ({
+                    code: item.codeSalle,
+                    nom: item.nomSalle || item.codeSalle,
+                }));
+
+                this.teacherCatalog = enseignants.map((item) => {
+                    const user = item?.utilisateur || {};
+                    return {
+                        id: item?.id,
+                        email: user.email,
+                        nom: user.nom || '',
+                        prénom: user.prenom || '',
+                    };
+                }).filter((item) => item.email);
+
+                this.teachers = this.teacherCatalog.map((item) => ({
+                    text: `${item.nom} ${item.prénom} (${item.email})`.trim(),
+                    value: item.email,
+                }));
+
+                this.selectedTeacher = this.teachers[0]?.value || null;
+            } catch (error) {
+                this.message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+                this.isError = true;
+            }
+        },
+
+        async loadFilieres() {
+            try {
+                const response = await adminService.getAllFilieres();
+                const filieres = Array.isArray(response?.data) ? response.data : [];
+                this.majors = filieres.map((filiere) => ({
+                    text: filiere.nom,
+                    value: filiere.codeFiliere,
+                }));
+            } catch (error) {
+                this.message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+                this.isError = true;
+            }
+        },
+
+        async loadEmploi() {
+            if (!(this.selectedOption && this.selectedDateDebut && this.selectedDateFin && this.selectedYear && this.selectedLevel)) return;
+            this.isLoading = true;
+            this.isError = false;
+            this.isSuccess = false;
+            try {
+                const annee = String(this.selectedYear).split('/')[0];
+                const response = await adminService.getTimeTable({ id: this.selectedLevel, annee });
+                const timetable = convertToTimetable(response?.data);
+                this.initialData = timetable;
+                this.parentSelectedData = JSON.parse(JSON.stringify(timetable));
+            } catch (error) {
+                this.message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+                this.isError = true;
+            } finally {
+                this.isLoading = false;
+            }
+        },
+
+        async resolvePeriodeId() {
+            const annee = Number(String(this.selectedYear).split('/')[0]);
+            const dateDebut = this.selectedDateDebut;
+            const dateFin = this.selectedDateFin;
+            const baseUrl = (process.env.VUE_APP_API_URL || 'https://classsched-backend.onrender.com').replace(/\/$/, '');
+
+            if (!annee || !dateDebut || !dateFin) {
+                throw new Error('Période invalide: année et dates requises.');
+            }
+
+            const createPeriodPayload = {
+                DateDebut: dateDebut,
+                DateFin: dateFin,
+                annee,
+            };
+
+            try {
+                await fetch(`${baseUrl}/plannification/periodes/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(createPeriodPayload),
+                });
+            } catch (_) {
+                // period may already exist
+            }
+
+            for (let id = 1; id <= 280; id += 1) {
+                try {
+                    const response = await fetch(`${baseUrl}/plannification/periodes/${id}/`);
+                    if (!response.ok) continue;
+                    const row = await response.json();
+                    if (
+                        row?.DateDebut === dateDebut &&
+                        row?.DateFin === dateFin &&
+                        Number(row?.annee) === annee
+                    ) {
+                        return id;
+                    }
+                } catch (_) {
+                    // continue probing
                 }
-            )
+            }
 
-            // On rempli la liste des filières.
-            adminService.getAllFilieres().then(
-                (response) => {
-                    var filieres = response.data;
+            throw new Error('Impossible de résoudre l\'identifiant de période.');
+        },
 
-                    this.majors = filieres.map((filiere) => {
-                        return {
-                            text: filiere.nom,
-                            value: filiere.codeFiliere,
-                        };
+        async serializeGridToCours(data) {
+            const entries = [];
+            const period = await this.resolvePeriodeId();
+
+            Object.entries(data || {}).forEach(([hourLabel, dayMap]) => {
+                Object.entries(dayMap || {}).forEach(([dayLabel, cell]) => {
+                    if (!cell || !cell.ue || !cell.room) return;
+                    const startHour = Number(String(hourLabel).split(':')[0]);
+                    if (Number.isNaN(startHour)) return;
+
+                    const endHour = Math.min(startHour + 2, 23);
+                    const heureDebut = `${String(startHour).padStart(2, '0')}:00`;
+                    const heureFin = `${String(endHour).padStart(2, '0')}:00`;
+
+                    entries.push({
+                        heureDebut,
+                        heureFin,
+                        ue: cell.ue,
+                        salle: cell.room,
+                        periode: period,
+                        jourDeCours: DAY_TO_API[dayLabel] || dayLabel.toLowerCase(),
                     });
-                },
-                (error) => {
-                    this.message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
-                    console.log("Error : " + this.message)
-                }
-            )
+                });
+            });
+
+            return entries;
         },
-        methods: {
-            // ... le reste du code ...
 
-            loadEmploi() {
-                this.isLoading = true; // Début du chargement au clic sur le bouton "Valider"
+        async deleteEmploi() {
+            this.isLoading = true;
+            this.isError = false;
+            this.isSuccess = false;
 
-                // Effectuez ici votre logique de traitement ou d'appel à l'API
+            try {
+                const response = await adminService.getCours();
+                const cours = Array.isArray(response?.data) ? response.data : [];
+                const targetPeriod = this.selectedOption || this.selectedLevel || String(this.selectedYear).split('/')[0];
 
-                // Simulez une pause de 2 secondes avant de terminer le chargement
-                setTimeout(() => {
-                    this.isLoading = false; // Fin du chargement après un délai simulé
-                }, 2000);
-                // Logique de suppression de l'emploi
-            },
-            deleteEmploi() {
-                this.isLoading = true; // Début du chargement au clic sur le bouton "Valider"
+                const toDelete = cours.filter((coursItem) => {
+                    const periodMatch = coursItem.periode && String(coursItem.periode) === String(targetPeriod);
+                    const niveauMatch = coursItem.niveau && String(coursItem.niveau) === String(this.selectedLevel);
+                    const optionMatch = coursItem.option && String(coursItem.option) === String(this.selectedOption);
+                    return periodMatch || niveauMatch || optionMatch;
+                });
 
-                // Effectuez ici votre logique de traitement ou d'appel à l'API
+                const deletePromises = toDelete
+                    .map((item) => item.id)
+                    .filter(Boolean)
+                    .map((id) => adminService.deleteCours(id));
 
-                // Simulez une pause de 2 secondes avant de terminer le chargement
-                setTimeout(() => {
-                    this.isLoading = false; // Fin du chargement après un délai simulé
-                    this.isSuccess = true; // Affiche l'alerte de succès
-
-                    // Masque l'alerte de succès après 3 secondes (ajustez selon vos besoins)
-                    setTimeout(() => {
-                        this.isSuccess = false;
-                    }, 3000);
-                }, 2000);
-                // Logique de suppression de l'emploi
-            },
-            confirmEmploi() {
-
-                this.isLoading = true; // Début du chargement au clic sur le bouton "Valider"
-
-                // Effectuez ici votre logique de traitement ou d'appel à l'API
-
-                // Simulez une pause de 2 secondes avant de terminer le chargement
-                setTimeout(() => {
-                    this.isLoading = false; // Fin du chargement après un délai simulé
-                    this.isSuccess = true; // Affiche l'alerte de succès
-
-                    // Masque l'alerte de succès après 3 secondes (ajustez selon vos besoins)
-                    setTimeout(() => {
-                        this.isSuccess = false;
-                    }, 3000);
-                }, 2000);
-            
-                // Logique de confirmation de l'emploi
-            },
-
-            handleSelectedDataChange(selectedData) {
-                // Mettez à jour la propriété parentSelectedData avec la matrice selectedData du composant enfant
-                this.parentSelectedData = toRaw(selectedData);
-
-                // Vérifiez si rawData est bien un tableau
-                if (Array.isArray(this.parentSelectedData)) {
-                    // Accédez à la ligne d'indice 3 et à la colonne 2 de la matrice
-                    console.log(`Enseignant : ${this.parentSelectedData[0][2].teacher} - UE : ${this.parentSelectedData[0][2].ue} - Salle : ${this.parentSelectedData[0][2].room}`);
+                if (deletePromises.length) {
+                    await Promise.allSettled(deletePromises);
                 }
-                this.initialData = selectedData;
-            },
 
-            dismissAlert() {
-                // Masque l'alerte de succès si l'utilisateur la ferme manuellement
-                this.isSuccess = false;
-            },
-        
-            // ... le reste du code ...
+                this.initialData = {};
+                this.parentSelectedData = {};
+                this.isSuccess = true;
+            } catch (error) {
+                this.message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+                this.isError = true;
+            } finally {
+                this.isLoading = false;
+            }
         },
-    }
+
+        async confirmEmploi() {
+            this.isLoading = true;
+            this.isError = false;
+            this.isSuccess = false;
+
+            try {
+                const sourceData = Object.keys(this.parentSelectedData || {}).length ? this.parentSelectedData : this.initialData;
+                const payloads = await this.serializeGridToCours(sourceData);
+                if (!payloads.length) {
+                    this.isLoading = false;
+                    this.isError = true;
+                    this.message = 'Aucun cours à enregistrer.';
+                    return;
+                }
+
+                const results = await Promise.allSettled(payloads.map((payload) => adminService.createCours(payload)));
+                const successCount = results.filter((result) => result.status === 'fulfilled').length;
+
+                if (!successCount) {
+                    throw new Error('Échec de l’enregistrement des cours.');
+                }
+
+                this.isSuccess = true;
+            } catch (error) {
+                this.message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+                this.isError = true;
+            } finally {
+                this.isLoading = false;
+            }
+        },
+
+        handleSelectedDataChange(selectedData) {
+            this.parentSelectedData = JSON.parse(JSON.stringify(selectedData || {}));
+            this.initialData = JSON.parse(JSON.stringify(selectedData || {}));
+        },
+
+        dismissAlert() {
+            this.isSuccess = false;
+            this.isError = false;
+        },
+    },
+}
 </script>
 
 
 
 <style scoped>
+    .tt-page-intro {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    .tt-kicker {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.4rem 0.78rem;
+        border-radius: 999px;
+        background: rgba(91, 44, 255, 0.1);
+        color: #5b2cff;
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+
+    .tt-title {
+        margin: 0.9rem 0 0;
+        font-size: clamp(1.2rem, 2vw, 1.65rem);
+        font-weight: 800;
+        color: #131b34;
+    }
+
+    .tt-subtitle {
+        margin: 0.5rem 0 0;
+        color: #68728f;
+        max-width: 680px;
+        line-height: 1.65;
+    }
+
+    .tt-surface {
+        background: #ffffff;
+        color: #111423;
+        border: 1px solid #e4e7f2;
+        border-radius: 18px;
+        box-shadow: 0 16px 38px rgba(15, 23, 52, 0.08);
+    }
+
+    .tt-surface :deep(.v-field__input),
+    .tt-surface :deep(.v-label),
+    .tt-surface :deep(.v-icon) {
+        color: #1b2339 !important;
+    }
+
+    .tt-surface :deep(.v-field) {
+        border-radius: 16px;
+        background: #fbfcff;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    }
+
+    .tt-surface :deep(.v-field--variant-outlined .v-field__outline__start),
+    .tt-surface :deep(.v-field--variant-outlined .v-field__outline__notch::before),
+    .tt-surface :deep(.v-field--variant-outlined .v-field__outline__end) {
+        border-color: #d8deef !important;
+    }
+
+    .tt-surface :deep(.v-messages) {
+        color: #69738f !important;
+    }
+
     .select-container {
         display: flex;
         width: 100%;
         margin: auto;
         flex-wrap: wrap;
         gap: 0.5rem;
+    }
+
+    .tt-controls-grid {
+        align-items: center;
+        row-gap: 0.9rem;
+    }
+
+    .tt-field {
+        min-width: 220px;
+        flex: 1 1 220px;
     }
 
     .menu-container {
@@ -381,6 +612,76 @@
         display: flex;
         align-items: center;
         gap: 0.4rem;
+    }
+
+    .tt-button-group {
+        justify-content: flex-end;
+        width: 100%;
+        margin-top: 0.25rem;
+    }
+
+    .tt-action-btn {
+        border-radius: 14px;
+        width: 42px;
+        height: 42px;
+        border: 1px solid rgba(91, 44, 255, 0.16);
+        box-shadow: 0 10px 18px rgba(91, 44, 255, 0.08);
+    }
+
+    .tt-action-search {
+        margin-left: auto;
+    }
+
+    .tt-date-row {
+        row-gap: 0.8rem;
+    }
+
+    .tt-date-panel {
+        border-radius: 18px;
+    }
+
+    .tt-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #313b59;
+        font-size: 0.9rem;
+        font-weight: 700;
+    }
+
+    .tt-input {
+        height: 52px;
+        border-radius: 16px;
+        border: 1px solid #d8deef;
+        box-shadow: none;
+        background: #fbfcff;
+        color: #131b34;
+        padding: 0 1rem;
+    }
+
+    .tt-input:focus {
+        border-color: #7d63f8;
+        box-shadow: 0 0 0 4px rgba(125, 99, 248, 0.12);
+    }
+
+    .tt-year-field {
+        min-width: 220px;
+    }
+
+    .tt-year-field :deep(.v-field__input) {
+        min-height: 52px;
+        padding-top: 0.65rem;
+        padding-bottom: 0.3rem;
+    }
+
+    .tt-table-wrap {
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .tt-table-wrap :deep(.schedule-scroll) {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     .loader-container {
@@ -423,6 +724,42 @@
 
         .row.w-50.m-auto {
             width: 100% !important;
+        }
+
+        .tt-page-intro {
+            padding: 1.15rem !important;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .menu-container {
+            padding: 0.85rem !important;
+        }
+
+        .tt-field {
+            min-width: 100%;
+            flex-basis: 100%;
+        }
+
+        .tt-button-group {
+            width: 100%;
+            justify-content: center;
+            gap: 0.7rem;
+            margin-top: 0.25rem;
+        }
+
+        .tt-action-btn {
+            width: 44px;
+            height: 44px;
+        }
+
+        .tt-action-search {
+            margin-left: 0;
+        }
+
+        .tt-input {
+            height: 48px;
+            font-size: 0.92rem;
         }
     }
 </style>
